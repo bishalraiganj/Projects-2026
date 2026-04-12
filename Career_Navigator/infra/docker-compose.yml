@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+
+  kafka:
+    image: apache/kafka:4.1.1
+    container_name: kafka
+    hostname: kafka
+    networks:
+      - micro-net
+    ports:
+      - "9092:9092"
+
+    environment:
+      # KRaft mode
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+
+      # Listeners (CRITICAL)
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # Storage
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+
+      # Topic behavior (IMPORTANT)
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+    healthcheck:
+      test: ["CMD", "bash", "-c", "nc -z localhost 9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  config-server:
+    image: bishaladhikary/config-server:0.0.1
+    container_name: config-server
+    networks:
+      - micro-net
+    ports:
+      - "8888:8888"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  eureka-server:
+    image: bishaladhikary/eureka-server:0.0.1
+    container_name: eureka-server
+    networks:
+      - micro-net
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+
+  employee-service:
+    image: bishaladhikary/employee-service:0.0.1
+    container_name: employee-service
+    networks:
+      - micro-net
+    ports:
+      - "9030:9030"
+    depends_on:
+      - eureka-server
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+
+  skill-service:
+    image: bishaladhikary/skill-service:0.0.1
+    container_name: skill-service
+    networks:
+      - micro-net
+    ports:
+      - "9040:9040"
+    depends_on:
+      - eureka-server
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+
+  gateway-server:
+    image: bishaladhikary/gateway-server:0.0.1
+    container_name: gateway-server
+    networks:
+      - micro-net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+
+networks:
+  micro-net:
+    driver: "bridge"
+
+volumes:
+  kafka-data:

@@ -1,0 +1,28 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+  config:
+    import: configserver:http://config-server:8888
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+

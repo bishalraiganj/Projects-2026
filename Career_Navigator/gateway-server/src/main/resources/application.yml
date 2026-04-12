@@ -1,0 +1,56 @@
+app:
+  message: Local config of gateway server
+
+spring:
+  kafka:
+    bootstrap-servers: kafka:9092
+  cloud:
+    bus:
+      enabled: true
+
+    gateway:
+      enabled: true
+      routes:
+        - id: placeholder
+          uri: http://localhost:8080
+          predicates:
+            - Path=/placeholder/**
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 6
+        initial-interval: 1500
+        max-interval: 2000
+        multiplier: 1.5
+  config:
+    import: optional:configserver:http://config-server:8888
+
+  application:
+    name: gateway-server
+
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: TRACE
+#    org.springframework.cloud.gateway.route: TRACE
+#    org.springframework.cloud.gateway.handler: TRACE
+#    org.springframework.cloud.gateway.config: DEBUG
+#    org.springframework.cloud.gateway.support: DEBUG
+#    org.springframework.boot.autoconfigure: DEBUG   # especially auto-config

@@ -1,0 +1,225 @@
+
+server:
+  port: 9030
+
+spring:
+  application:
+    name: employee
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: springCloudBus
+
+  cloud:
+    bus:
+      enabled: true
+      destination: springCloudBus
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    service-url:
+#      defaultZone: http://eureka-server:8761/eureka/
+
+
+
+management:
+  endpoint:
+    env:
+      show-values: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.springframework.cloud.bus: DEBUG
+# v3 start
+
+#server:
+#  port: 9030
+#
+#spring:
+#  application:
+#    name: employee
+#
+#  kafka:
+#    bootstrap-servers: kafka:9092
+#
+#  cloud:
+##    stream:
+##      defaultBinder: kafka
+##      bindings:
+##        springCloudBusInput:
+##          destination: springCloudBus
+##          group: springCloudBus
+##        springCloudBusOutput:
+##          destination: springCloudBus
+#
+#    bus:
+#      enabled: true
+#      destination: springCloudBus
+#      id: ${spring.application.name}:${server.port}
+#
+#    config:
+#      fail-fast: false
+#
+#  config:
+#    import: optional:configserver:http://config-server:8888
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://eureka-server:8761/eureka/
+#  instance:
+#    prefer-ip-address: true
+#
+#management:
+#  endpoint:
+#    env:
+#      show-values: always
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+#logging:
+#  level:
+#    org.springframework.cloud.bus: DEBUG
+#
+#
+#
+## v3
+#
+#
+#
+#
+#
+#
+#
+
+
+#server:
+#  port: 9030
+#
+#spring:
+#  application:
+#    name: employee
+#
+#  kafka:
+#    bootstrap-servers: kafka:9092
+#
+#  config:
+#    import: optional:configserver:http://config-server:8888
+#
+#  cloud:
+#    config:
+#      fail-fast: false
+#      retry:
+#        max-attempts: 6
+#        initial-interval: 1500
+#        max-interval: 2000
+#        multiplier: 1.5
+#
+#    bus:
+#      enabled: true
+#      destination: springCloudBus
+#
+#    stream:
+#      defaultBinder: kafka
+#      bindings:
+#        springCloudBusInput:
+#          destination: springCloudBus
+#          group: springCloudBus
+#        springCloudBusOutput:
+#          destination: springCloudBus
+#
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://eureka-server:8761/eureka/
+#
+#  instance:
+#    prefer-ip-address: true
+#
+#management:
+#  endpoint:
+#    env:
+#      show-values: always
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+#logging:
+#  level:
+#    org.springframework.cloud.bus: DEBUG
+#    org.springframework.kafka: INFO
+#    org.springframework.cloud.context.scope.refresh: DEBUG
+
+
+
+#version 1
+
+#server:
+#  port: 9030
+#
+#spring:
+#  application:
+#    name: employee
+#  kafka:
+#    bootstrap-servers: kafka:9092
+#
+#
+#  cloud:
+#    stream:
+#      bindings:
+#        springCloudBusInput:
+#          destination: springCloudBus
+#        springCloudBusOutput:
+#          destination: springCloudBus
+#    bus:
+#      enabled: true
+#      destination: springCloudBus
+#    config:
+#      fail-fast: false
+#      retry:
+#        max-attempts: 6
+#        initial-interval: 1500
+#        max-interval: 2000
+#        multiplier: 1.5
+#  config:
+#    import: optional:configserver:http://config-server:8888
+#
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://eureka-server:8761/eureka/
+#
+#management:
+#  endpoint:
+#    env:
+#      show-values: always
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+#
+#
+#logging:
+#  level:
+#    org.springframework.cloud.bus: DEBUG
+#    org.springframework.kafka: INFO
+#    org.springframework.cloud.context.scope.refresh: DEBUG

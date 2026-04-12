@@ -1,0 +1,108 @@
+server:
+  port: 9033
+
+spring:
+  application:
+    name: employee-skill-profile-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  config:
+    import: configserver:http://localhost:8888
+
+  cloud:
+    bus:
+      id: ${spring.application.name}:${server.port}
+      enabled: true
+      destination: springCloudBus
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    bus-refresh:
+      access: unrestricted
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    env:
+      show-values: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#server:
+#  port: 9033
+#
+#spring:
+#  application:
+#    name: employee-skill-profile-service
+#
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#
+#  config:
+#    import: configserver:http://localhost:8888
+#
+#  cloud:
+#
+#    bus:
+#      id: ${spring.application.name}:${server.port}
+#      enabled: true
+#      destination: springCloudBus
+#
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#
+#
+#management:
+#  health:
+#    readiness-state:
+#      enabled: true
+#    liveness-state:
+#      enabled: true
+#  endpoint:
+#    bus-refresh:
+#      access: unrestricted
+#    health:
+#      probes:
+#        enabled: true
+#      show-details: always
+#    env:
+#      show-values: always
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"

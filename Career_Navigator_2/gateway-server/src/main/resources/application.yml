@@ -1,0 +1,61 @@
+server:
+  port: 8071
+
+
+spring:
+  application:
+    name: gateway-server
+  config:
+    import: configserver:http://localhost:8888
+
+  kafka:
+    bootstrap-servers: localhost:9092
+  cloud:
+    bus:
+      id: ${spring.application.name}:${server.port}
+    enabled: true
+    destination: springCloudBus
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+              lowerCaseServiceId: true
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoint:
+
+    gateway:
+      access: unrestricted
+    env:
+      show-values: always
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  info:
+    env:
+      enabled: true
+
+info:
+    app:
+      name: "gateway-server"
+      description: "CareerNavigator Gateway Server Application"
+      version: "2.0.0"
+
+

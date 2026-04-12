@@ -1,0 +1,53 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  kafka:
+    bootstrap-servers: kafka:9092
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka:9092
+    bus:
+      id: config-server:${server.port}
+      enabled: true
+      destination: springCloudBus
+    config:
+      server:
+        git:
+          uri: https://github.com/bishalraiganj/careernavigatorconfig.git
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    bus-refresh:
+      access: unrestricted
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+
+
+
+encrypt:
+  key: "45D81EC1EF61DF9AD8D3E5BB397F9"
+
+logging:
+  level:
+    org.springframework.cloud.bus: DEBUG
+    org.springframework.kafka: INFO
