@@ -1,18 +1,19 @@
 package com.bishaladhikary.employee.skill.producer;
 
-import org.springframework.kafka.core.KafkaTemplate;
+import com.bishaladhikary.employee.skill.event.EmployeeSkillSubmittedEvent;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmployeeSkillEventProducer {
 
-	private final KafkaTemplate<String, Object> kafkaTemplate;
+	private final StreamBridge streamBridge;
 
-	public EmployeeSkillEventProducer(KafkaTemplate<String, Object> kafkaTemplate) {
-		this.kafkaTemplate = kafkaTemplate;
+	public EmployeeSkillEventProducer(StreamBridge streamBridge) {
+		this.streamBridge = streamBridge;
 	}
 
-	public void publishSkillSubmitted(Object event) {
-		kafkaTemplate.send("employee-skill-events", event);
+	public void publish(EmployeeSkillSubmittedEvent event) {
+		streamBridge.send("employeeSkillOutput-out-0", event);
 	}
 }

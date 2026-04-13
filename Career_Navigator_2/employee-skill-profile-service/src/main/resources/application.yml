@@ -5,17 +5,51 @@ spring:
   application:
     name: employee-skill-profile-service
 
-  kafka:
-    bootstrap-servers: localhost:9092
-
   config:
     import: configserver:http://localhost:8888
 
+  kafka:
+    bootstrap-servers: localhost:9092
+
   cloud:
+
+    # 🔵 CONFIG BUS (OK)
     bus:
       id: ${spring.application.name}:${server.port}
       enabled: true
       destination: springCloudBus
+
+    # 🟡 STREAM (EVENT SYSTEM)
+    stream:
+
+      defaultBinder: kafka
+
+      bindings:
+
+        # 🔼 PRODUCER (send skill event)
+        employeeSkillOutput-out-0:
+          destination: employee-skill-events
+
+        # 🔽 CONSUMER (receive approval event)
+        approvalInput-in-0:
+          destination: approval-events
+          group: employee-skill-group
+
+          consumer:
+            maxAttempts: 3
+            backOffInitialInterval: 1000
+            backOffMultiplier: 2.0
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
+        bindings:
+
+          approvalInput-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: approval-events.DLQ
 
 eureka:
   instance:
@@ -25,84 +59,7 @@ eureka:
     fetch-registry: true
 
 management:
-  health:
-    readiness-state:
-      enabled: true
-    liveness-state:
-      enabled: true
-  endpoint:
-    bus-refresh:
-      access: unrestricted
-    health:
-      probes:
-        enabled: true
-      show-details: always
-    env:
-      show-values: always
   endpoints:
     web:
       exposure:
         include: "*"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#server:
-#  port: 9033
-#
-#spring:
-#  application:
-#    name: employee-skill-profile-service
-#
-#  kafka:
-#    bootstrap-servers: localhost:9092
-#
-#  config:
-#    import: configserver:http://localhost:8888
-#
-#  cloud:
-#
-#    bus:
-#      id: ${spring.application.name}:${server.port}
-#      enabled: true
-#      destination: springCloudBus
-#
-#eureka:
-#  instance:
-#    prefer-ip-address: true
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#
-#
-#management:
-#  health:
-#    readiness-state:
-#      enabled: true
-#    liveness-state:
-#      enabled: true
-#  endpoint:
-#    bus-refresh:
-#      access: unrestricted
-#    health:
-#      probes:
-#        enabled: true
-#      show-details: always
-#    env:
-#      show-values: always
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"

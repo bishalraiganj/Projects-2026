@@ -1,0 +1,52 @@
+server:
+  port: 9034
+
+spring:
+  application:
+    name: approval-service
+
+  config:
+    import: configserver:http://localhost:8888
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  cloud:
+
+    # ? Config Bus (OK)
+    bus:
+      enabled: true
+      id: ${spring.application.name}:${server.port}
+      destination: springCloudBus
+
+    # ? Event Streaming
+    stream:
+
+      defaultBinder: kafka
+
+      bindings:
+
+        # ? CONSUMER
+        employeeSkillInput-in-0:
+          destination: employee-skill-events
+          group: approval-group
+
+          consumer:
+            maxAttempts: 3                  # retry 3 times
+            backOffInitialInterval: 1000    # 1 sec
+            backOffMultiplier: 2.0          # exponential backoff
+
+        # ? PRODUCER
+        approvalOutput-out-0:
+          destination: approval-events
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
+        bindings:
+
+          employeeSkillInput-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: employee-skill-events.DLQ
