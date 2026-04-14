@@ -60,7 +60,7 @@ public class EmployeeSkillService {
 				);
 
 		// 5. Publish event
-		producer.publishSkillSubmitted(event);
+		producer.publish(event);
 
 		// 6. Return response
 		return map(saved);

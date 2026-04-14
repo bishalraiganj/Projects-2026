@@ -9,6 +9,7 @@ import com.bishaladhikary.approval_service.repository.ApprovalRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ApprovalService {
@@ -20,6 +21,12 @@ public class ApprovalService {
 						   ApprovalEventProducer producer) {
 		this.repository = repository;
 		this.producer = producer;
+	}
+
+
+	public List<ApprovalRequest> getAll(Long managerId)
+	{
+		return repository.findByApproverId(managerId);
 	}
 
 	public void approve(Long id, String comments) {
