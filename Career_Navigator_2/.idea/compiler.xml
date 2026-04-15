@@ -8,9 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
         <module name="gateway-server" />
+        <module name="skill-catalog-service" />
         <module name="approval-service" />
         <module name="eureka-server" />
         <module name="employee-skill-profile-service" />
+        <module name="employee-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -18,9 +20,11 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="approval-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
+      <module name="employee-service" options="-parameters" />
       <module name="employee-skill-profile-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="gateway-server" options="-parameters" />
+      <module name="skill-catalog-service" options="-parameters" />
     </option>
   </component>
 </project>
