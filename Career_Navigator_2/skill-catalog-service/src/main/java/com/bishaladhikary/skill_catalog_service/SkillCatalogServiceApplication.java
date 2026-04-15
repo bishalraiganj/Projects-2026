@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 		info = @Info(
 				title= "Skill catalog service API",
 				version = "1.0",
-				description = "Endpoints for managing Skills "go
+				description = "Endpoints for managing Skills "
 		)
 )
 @SpringBootApplication
