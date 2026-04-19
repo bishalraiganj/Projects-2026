@@ -1,0 +1,76 @@
+server:
+  port: 9035
+
+spring:
+  application:
+    name: employee-service
+  config:
+    import: configserver:http://localhost:8888
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  cloud:
+    bus:
+      id: ${spring.application.name}:${server.port}
+      enabled: true
+      destination: springCloudBus
+    stream:
+      kafka:
+        binder:
+          brokers: http://localhost:9092
+
+
+    function:
+      definition: employeeDeletedInput
+
+      defaultBinder: kafka
+      bindings:
+        employeeDeletedInput-in-0:
+          destination: employee-deleted-events
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/career_navigator_2
+    username: career_navigator_2
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # options: none, validate, update, create, create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        #        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  health:
+    liveness-state:
+      enabled: true
+    readiness-state:
+      enabled: true
+  endpoint:
+    env:
+      show-values: always
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.tool.hbm2ddl: DEBUG
+    org.springframework.boot.autoconfigure.orm.jpa: DEBUG
