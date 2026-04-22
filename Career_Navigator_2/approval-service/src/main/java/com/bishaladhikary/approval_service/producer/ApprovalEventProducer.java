@@ -23,6 +23,7 @@
 package com.bishaladhikary.approval_service.producer;
 
 import com.bishaladhikary.approval_service.event.ApprovalApprovedEvent;
+import com.bishaladhikary.approval_service.event.ApprovalRejectedEvent;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
@@ -38,4 +39,11 @@ public class ApprovalEventProducer {
 	public void publishApproved(ApprovalApprovedEvent event) {
 		streamBridge.send("approvalOutput-out-0", event);
 	}
+
+	public void publishRejected(ApprovalRejectedEvent event)
+	{
+		streamBridge.send("rejectedOutput-out-0",event);
+	}
+
+
 }

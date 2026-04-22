@@ -6,10 +6,13 @@ import com.bishaladhikary.employee_service.entity.dto.CreateEmployeeResponseDTO;
 import com.bishaladhikary.employee_service.entity.dto.UpdateEmployeeRequestDTO;
 import com.bishaladhikary.employee_service.entity.dto.UpdateEmployeeResponseDTO;
 import com.bishaladhikary.employee_service.entity.enums.EmployeeStatus;
+import com.bishaladhikary.employee_service.exception.EmployeeNotFoundException;
 import com.bishaladhikary.employee_service.repository.EmployeeRepository;
 import com.bishaladhikary.employee_service.exception.DBOperationFailedException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -20,6 +23,23 @@ public class EmployeeService {
 	public EmployeeService(EmployeeRepository repository)
 	{
 		this.repository = repository;
+	}
+
+
+	public boolean checkExists(Long id)
+	{
+		return repository.existsById(id);
+	}
+
+	public Employee getEmployee(Long id)
+	{
+		Optional<Employee> employee = repository.findById(id);
+		if(employee.isEmpty())
+		{
+			throw new EmployeeNotFoundException("Employee id: " + id + " doesn't exist");
+		}
+
+		return employee.get();
 	}
 
 	public CreateEmployeeResponseDTO createEmployee(CreateEmployeeRequestDTO request)

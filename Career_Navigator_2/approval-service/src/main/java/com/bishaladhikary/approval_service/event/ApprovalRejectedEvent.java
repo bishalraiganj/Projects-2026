@@ -1,15 +1,16 @@
 package com.bishaladhikary.approval_service.event;
 
-public class ApprovalApprovedEvent {
+public class ApprovalRejectedEvent {
 
 	private Long approvalRequestId;
-	private Long skill_request_id;
+	private Long skillRequestId;
 
-	public ApprovalApprovedEvent(Long approvalRequestId, Long entityId) {
+	public ApprovalRejectedEvent(Long approvalRequestId, Long skillRequestId) {
 		this.approvalRequestId = approvalRequestId;
-		this.skill_request_id = entityId;
+
+		this.skillRequestId = skillRequestId;
 	}
 
 	public Long getApprovalRequestId() { return approvalRequestId; }
-	public Long getEntityId() { return skill_request_id; }
+	public Long getSkillRequestId() { return skillRequestId; }
 }

@@ -1,15 +1,24 @@
-package com.bishaladhikary.approval_service.event;
+package com.bishaladhikary.employee.skill.event;
 
 public class ApprovalRejectedEvent {
 
 	private Long approvalRequestId;
-	private Long skill_request_id;
+	private Long skillRequestId;
 
-	public ApprovalRejectedEvent(Long approvalRequestId, Long entityId) {
+	public ApprovalRejectedEvent(Long approvalRequestId, Long skillRequestId) {
 		this.approvalRequestId = approvalRequestId;
-		this.skill_request_id = entityId;
+
+		this.skillRequestId = skillRequestId;
 	}
 
 	public Long getApprovalRequestId() { return approvalRequestId; }
-	public Long getEntityId() { return skill_request_id; }
+	public Long getSkillRequestId() { return skillRequestId; }
+
+	public void setApprovalRequestId(Long approvalRequestId) {
+		this.approvalRequestId = approvalRequestId;
+	}
+
+	public void setSkillRequestId(Long skillRequestId) {
+		this.skillRequestId = skillRequestId;
+	}
 }

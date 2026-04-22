@@ -13,7 +13,7 @@ public class ApprovalRequest {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Long entityId;
+	private Long skillRequestId;
 	private Long requesterId;
 	private Long approverId;
 
@@ -25,8 +25,8 @@ public class ApprovalRequest {
 
 	public Long getId() { return id; }
 
-	public Long getEntityId() { return entityId; }
-	public void setEntityId(Long entityId) { this.entityId = entityId; }
+	public Long getSkillRequestId() { return skillRequestId; }
+	public void setSkillRequestId(Long entityId) { this.skillRequestId = entityId; }
 
 	public Long getRequesterId() { return requesterId; }
 	public void setRequesterId(Long requesterId) { this.requesterId = requesterId; }

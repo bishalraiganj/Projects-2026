@@ -22,7 +22,7 @@ public class EmployeeSkillController{
 		this.service = service;
 	}
 
-	@PostMapping
+	@PostMapping("/skillrequest")
 	public ResponseEntity<EmployeeSkillResponse> addSkill(@RequestBody AddEmployeeSkillRequest request)
 	{
 		return ResponseEntity.ok(service.addSkill(request));

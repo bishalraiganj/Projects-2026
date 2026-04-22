@@ -27,6 +27,13 @@ public class ApprovalController {
 		service.approve(id, request.getComments());
 	}
 
+
+	@PostMapping("/{id}/reject")
+	public void reject(@PathVariable Long id, @RequestBody ApprovalDecisionRequest request)
+	{
+		service.reject(id, request.getComments());
+	}
+
 	@GetMapping("/getAll/{id}")
 	public ResponseEntity<List<ApprovalRequest>> getAllApprovalRequests(@PathVariable("id") Long managerId)
 	{
