@@ -1,6 +1,5 @@
 package com.bishaladhikary.approval_service.feign;
 
-import com.bishaladhikary.approval_service.entity.Employee;
 import com.bishaladhikary.approval_service.entity.EmployeeInfo;
 import jakarta.ws.rs.Path;
 import org.springframework.cloud.openfeign.FeignClient;

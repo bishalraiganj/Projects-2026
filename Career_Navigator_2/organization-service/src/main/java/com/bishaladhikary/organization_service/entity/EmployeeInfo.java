@@ -1,15 +1,13 @@
 package com.bishaladhikary.organization_service.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="employeeInfo")
+@Table(name="employee_info")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

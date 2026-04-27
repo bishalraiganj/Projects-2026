@@ -1,20 +1,14 @@
 package com.bishaladhikary.organization_service.entity;
 
-import com.bishaladhikary.employee_service.entity.enums.EmployeeStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="employees")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class Employee {
 
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+
 	private Long id;
 
 
