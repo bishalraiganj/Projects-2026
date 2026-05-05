@@ -1,0 +1,90 @@
+server:
+  port: 9033
+
+spring:
+  application:
+    name: employee-skill-profile-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/career_navigator_2
+    username: career_navigator_2
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # options: none, validate, update, create, create-drop
+    show-sql: true
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+
+
+  config:
+    import: configserver:http://localhost:8888
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  cloud:
+    function:
+      definition: approvalInput; rejectedInput
+
+    # 🔵 CONFIG BUS (OK)
+    bus:
+      id: ${spring.application.name}:${server.port}
+      enabled: true
+      destination: springCloudBus
+
+    # 🟡 STREAM (EVENT SYSTEM)
+    stream:
+
+      defaultBinder: kafka
+
+      bindings:
+
+#        CONSUMER (receive rejected event)
+        rejectedInput-in-0:
+          destination: rejected-events
+          group: employee-skill-group
+
+        #  PRODUCER (send skill event)
+        employeeSkillOutput-out-0:
+          destination: employee-skill-events
+
+        #  CONSUMER (receive approval event)
+        approvalInput-in-0:
+          destination: approval-events
+          group: employee-skill-group
+
+          consumer:
+            maxAttempts: 3
+            backOffInitialInterval: 1000
+            backOffMultiplier: 2.0
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
+        bindings:
+
+          approvalInput-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: approval-events.DLQ
+
+eureka:
+ client:
+   service-url:
+     defaultZone:  http://localhost:8761/eureka/
+
+management:
+  endpoint:
+    env:
+      show-values: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"

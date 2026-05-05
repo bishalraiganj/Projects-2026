@@ -1,0 +1,35 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+  kafka:
+    bootstrap-servers: localhost:9092
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+    bus:
+      id: ${spring.application.name}:${server.port}
+      enabled: true
+      destination: springCloudBus
+  config:
+    import: configserver:http://localhost:8888
+
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+
+management:
+  endpoint:
+    env:
+      show-values: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
