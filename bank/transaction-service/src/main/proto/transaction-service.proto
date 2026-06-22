@@ -2,7 +2,7 @@ syntax =  "proto3";
 
 
 option java_multiple_files = true;
-option java_package = "com.virtusa.transaction-service.model";
+option java_package = "com.bishal.transaction-service.model";
 
 
 message TransferRequest{
