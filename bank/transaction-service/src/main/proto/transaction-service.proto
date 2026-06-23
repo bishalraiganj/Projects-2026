@@ -2,7 +2,7 @@ syntax =  "proto3";
 
 
 option java_multiple_files = true;
-option java_package = "com.bishal.transaction-service.model";
+option java_package = "com.bishal.transactionService.model";
 
 
 message TransferRequest{
@@ -15,4 +15,24 @@ message TransferRequest{
 message TransferResponse{
   string transfer_id = 1;
   string status = 2;
+}
+
+
+
+message TransferStatusRequest{
+
+  string transfer_id = 1;
+
+}
+
+
+message TransferStatusResponse{
+  string status= 2;
+}
+
+service TransactionService{
+
+  rpc transfer(TransferRequest) returns (TransferResponse);
+  rpc getTransferStatus(TransferStatusRequest) returns (stream TransferStatusResponse);
+
 }
