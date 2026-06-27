@@ -1,6 +1,7 @@
 package com.nbi.transaction_service.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.BeanDeserializer;
 import com.nbi.transaction_service.models.entities.OutboxEvent;
 import com.nbi.transaction_service.models.events.TransferRequestedEvent;
 import com.nbi.transaction_service.models.exception.KafkaOrOutboxEventSaveError;
@@ -12,6 +13,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -36,13 +39,41 @@ public class OutboxRelayJob {
 	@Transactional
 	public void publishPendingEvents()
 	{
+
+		log.info("OutboxRelayJob started... Publishing pending events");
 		List<OutboxEvent> outboxEvents = outboxEventRepository.findByPublishedFalse();
 
 		for(OutboxEvent outboxEvent : outboxEvents)
 		{
 			try{
+
+				System.out.println("========== TransferRequestedEvent ==========");
+
+				for (Constructor<?> c : TransferRequestedEvent.class.getDeclaredConstructors()) {
+					System.out.println(c);
+				}
+
+				System.out.println(Arrays.toString(
+						TransferRequestedEvent.class.getDeclaredConstructors()));
+
+				System.out.println("Superclass = " +
+						TransferRequestedEvent.class.getSuperclass());
+
+
+
+
+
+
+
+
             //Deserializing string jsonPayload back into actual type
 			TransferRequestedEvent event  = mapper.readValue(outboxEvent.getPayload(),TransferRequestedEvent.class);
+
+
+
+				System.out.println(outboxEvent.getPayload());
+
+
 
 			//publishing then event to the corresponding kafka topic
 			kafkaTemplate.send("transfer.requested",outboxEvent.getAggregateId(),event);

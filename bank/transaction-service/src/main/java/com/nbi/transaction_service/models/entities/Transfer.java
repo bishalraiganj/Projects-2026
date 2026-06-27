@@ -1,11 +1,13 @@
 package com.nbi.transaction_service.models.entities;
 
+import com.nbi.transaction_service.models.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Transfer {
+public class Transfer extends Auditable {
 
 	@Id
 	@Column(length = 36)
@@ -47,9 +49,5 @@ public class Transfer {
 	@Column(nullable = false)
 	private Long version = 0L;
 
-	@Column(name = "created_at", nullable = false)
-	private LocalDateTime createdAt;
 
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
 }
