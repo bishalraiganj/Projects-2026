@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class OutboxRowPersistService {
 
+	private final ObjectMapper mapper;
 	private static final Logger log = LoggerFactory.getLogger(OutboxRowPersistService.class);
 	private OutboxEventRepository outboxEventRepository;
 
-	public  OutboxRowPersistService(OutboxEventRepository outboxEventRepository) {
+	public  OutboxRowPersistService(OutboxEventRepository outboxEventRepository, ObjectMapper mapper) {
 		this.outboxEventRepository = outboxEventRepository;
+		this.mapper = mapper;
 	}
 
 
@@ -28,7 +30,7 @@ public class OutboxRowPersistService {
 
 		//payload creation and setter logic :-)
 
-		ObjectMapper mapper = new ObjectMapper();
+
 
 		TransferRequestedEvent event = TransferRequestedEvent.builder()
 				.transferId(savedTransfer.getId())

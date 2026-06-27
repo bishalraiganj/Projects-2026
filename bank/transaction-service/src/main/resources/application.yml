@@ -22,18 +22,21 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 
   kafka:
-    bootstrap-servers: localhost:9092
     producer:
-      key-serializer:
-      value-serializer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true
     consumer:
-      key-deserializer:
-      value-deserializer:
+      group-id: transaction-service
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "com.nbi.transaction_service.models.events"
     listener:
-      ack-mode: record
-
+      ack-mode: manual_immediate   # not 'record' ? record auto-acks, breaking idempotency
 
 management:
   endpoints:

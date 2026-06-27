@@ -42,10 +42,10 @@ public class OutboxRelayJob {
 		{
 			try{
             //Deserializing string jsonPayload back into actual type
-			TransferRequestedEvent event  = mapper.convertValue(outboxEvent.getPayload(),TransferRequestedEvent.class);
+			TransferRequestedEvent event  = mapper.readValue(outboxEvent.getPayload(),TransferRequestedEvent.class);
 
 			//publishing then event to the corresponding kafka topic
-			kafkaTemplate.send("transferRequested",outboxEvent.getAggregateId(),event);
+			kafkaTemplate.send("transfer.requested",outboxEvent.getAggregateId(),event);
 
 			//updating event publish status
 			outboxEvent.setPublished(true);
