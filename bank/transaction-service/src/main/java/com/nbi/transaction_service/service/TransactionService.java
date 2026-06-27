@@ -31,7 +31,15 @@ public class TransactionService extends TransactionServiceGrpc.TransactionServic
 
 			private OutboxRowPersistService outboxRowPersistService;
 
-	private Logger logger = LoggerFactory.getLogger(TransactionService.class);
+
+			public TransactionService(TransferRepository transferRepository, LedgerRepository ledgerRepository, OutboxEventRepository outboxEventRepository, OutboxRowPersistService outboxRowPersistService) {
+				this.transferRepository = transferRepository;
+				this.ledgerRepository = ledgerRepository;
+				this.outboxEventRepository = outboxEventRepository;
+				this.outboxRowPersistService = outboxRowPersistService;
+			}
+
+			private Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
 			@Override
 			@Transactional
@@ -66,6 +74,7 @@ public class TransactionService extends TransactionServiceGrpc.TransactionServic
 				TransferResponse response = TransferResponse.newBuilder().setTransferId(responseTransferId).build();
 
 				responseObserver.onNext(response);
+				responseObserver.onCompleted();
 
 
 

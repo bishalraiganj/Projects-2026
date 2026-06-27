@@ -2,6 +2,13 @@ package com.nbi.transaction_service.repository;
 
 import com.nbi.transaction_service.models.entities.OutboxEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+	@Repository
 public interface OutboxEventRepository extends JpaRepository<OutboxEvent,Long> {
+
+
+	List<OutboxEvent> findByPublishedFalse();
 }

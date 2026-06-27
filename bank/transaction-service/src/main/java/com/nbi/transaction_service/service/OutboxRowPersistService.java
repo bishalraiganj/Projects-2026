@@ -18,6 +18,10 @@ public class OutboxRowPersistService {
 	private static final Logger log = LoggerFactory.getLogger(OutboxRowPersistService.class);
 	private OutboxEventRepository outboxEventRepository;
 
+	public  OutboxRowPersistService(OutboxEventRepository outboxEventRepository) {
+		this.outboxEventRepository = outboxEventRepository;
+	}
+
 
 	public String publishTransferInitiated(OutboxEvent outboxEvent, Transfer savedTransfer) {
 

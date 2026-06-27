@@ -38,6 +38,15 @@ public class OutboxEvent {
 	private LocalDateTime createdAt;
 
 
+	@Override
+	public String toString() {
+
+		return
+				"OutboxEvent [id=" + id + ", aggregateId=" + aggregateId + ", eventType=" + eventType +
+				", payload=" + payload + ", published=" + published + ", createdAt=" + createdAt + "]";
+
+	}
+
 
 
 }
