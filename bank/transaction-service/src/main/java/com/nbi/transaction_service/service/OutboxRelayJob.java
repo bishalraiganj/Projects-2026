@@ -47,18 +47,6 @@ public class OutboxRelayJob {
 		{
 			try{
 
-				System.out.println("========== TransferRequestedEvent ==========");
-
-				for (Constructor<?> c : TransferRequestedEvent.class.getDeclaredConstructors()) {
-					System.out.println(c);
-				}
-
-				System.out.println(Arrays.toString(
-						TransferRequestedEvent.class.getDeclaredConstructors()));
-
-				System.out.println("Superclass = " +
-						TransferRequestedEvent.class.getSuperclass());
-
 
 
 
@@ -71,19 +59,25 @@ public class OutboxRelayJob {
 
 
 
-				System.out.println(outboxEvent.getPayload());
 
 
 
 			//publishing then event to the corresponding kafka topic
-			kafkaTemplate.send("transfer.requested",outboxEvent.getAggregateId(),event);
+			kafkaTemplate.send("transfer.requested",outboxEvent.getAggregateId(),event)
+					.whenComplete((result,ex)->{
+						if(ex==null)
+						{
+							//updating event publish status
+							outboxEvent.setPublished(true);
+							outboxEventRepository.save(outboxEvent);
+							log.info("published transferRequested event for {}",outboxEvent);
+						}else{
+							log.error("Error while sending event or saving and changing outbox event status",ex);
+							throw  new KafkaOrOutboxEventSaveError(ex.getMessage());
+						}
+					});
 
-			//updating event publish status
-			outboxEvent.setPublished(true);
 
-				outboxEventRepository.save(outboxEvent);
-
-				log.info("published transferRequested event for {}",outboxEvent);
 			}catch(Exception e)
 			{
 				log.error("Error while sending event or saving and changing outbox event status",e);
